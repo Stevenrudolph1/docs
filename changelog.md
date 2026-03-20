@@ -6,6 +6,25 @@ All significant system changes, newest first. Not strategic decisions (that's ST
 
 ## 2026-03-20
 
+### Campaign Tracker V2 — UI Rebuild + API POST Endpoint
+- **Rebuilt** `xavigate-site/admin-campaigns.html` — full V2 redesign (was ~550 lines, now ~640 lines)
+  - Landing Pages tab: card grid instead of table rows — each card shows name, LP ID slug, colored status badge, priority tag, pain-family badge, brief/audit/campaign indicators, status dropdown, "↗ open page" link resolving `canonical_landing_path` to live xavigate.com URL, click-to-edit inline notes
+  - Campaigns tab: same table structure but added **Copy UTM** button per row (builds full UTM URL from `platform` + `utm_campaign` + LP path, copies to clipboard); inline click-to-edit notes; **+ Add Campaign** modal (fields: campaign_id, name, platform, destination LP, UTM slug, objective)
+  - Performance tab: proper empty state with API instructions and field reference
+  - Overview cards: green/red/grey color signals instead of flat counts
+- **Added** `POST /admin/campaigns` to `xavigate-api/src/index.js` — creates new campaign row in D1 `campaigns` table; returns 201 on success, 409 on duplicate campaign_id
+- **Backend unchanged:** D1 schema, auth pattern, PATCH endpoints, sync script all untouched
+
+#### Campaign tracker architecture summary
+| Layer | What | Where |
+|-------|------|-------|
+| UI | `admin-campaigns.html` | `xavigate-site/` — deployed via Cloudflare Pages |
+| API | GET/PATCH/POST landing-pages, campaigns; GET/POST performance | `xavigate-api/src/index.js` — Cloudflare Worker at `api.xavigate.com` |
+| DB | D1 `renergence-training` — tables: `landing_pages`, `campaigns`, `performance_log` | Cloudflare D1 |
+| Auth | `XavAuth.checkAuth()` — admin-gated (`steven@multiplenatures.com`) | `xavigate-site/js/auth.js` |
+| Sync | `python3 marketing/scripts/sync-registry-to-db.py` | Pushes JSON registries → D1 |
+| Registries | `marketing/registries/landing-pages.json`, `campaigns.json` | Source of truth for LP/campaign metadata |
+
 ### Marketing System — Landing Page Operations Layer Added
 - **Added** `marketing/canon/MARKETING-16-pain-to-page-routing.md` — operational workflow from pain kernels → user-surface language → ad hook → landing page → assessment → Map
 - **Updated** `marketing/canon/MARKETING-15-pain-kernels.md` — linked to companion routing workflow
