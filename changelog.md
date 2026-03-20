@@ -6,6 +6,15 @@ All significant system changes, newest first. Not strategic decisions (that's ST
 
 ## 2026-03-20
 
+### Landing Pages — All 3 Launch LPs Ready, Migrated to /landing/
+- **Audited + fixed** `landing/no-traction.html` (LP-002) — LG2 gate failure resolved (paid tier CTA made non-linked), proof quotes moved adjacent to mid-page and bottom CTAs. Score: 153 → 159/200. All 8 gates pass.
+- **Migrated** `direction-confusion.html` → `landing/direction-confusion.html` (LP-003) — all relative paths fixed, canonical URL updated to `/landing/direction-confusion`
+- **Confirmed** `landing/wrong-fit.html` (LP-001) already in correct location
+- **Added tier card block** to LP-003 — standard "Two levels of read" section, paid tier routes to `../test.html` only (no Map link)
+- **Added 301 redirects** in `xavigate-site/_redirects` — `/wrong-fit` and `/direction-confusion` both redirect to `/landing/` equivalents
+- **Updated registry** — all 3 launch LPs at `status: ready` with canonical paths corrected (`marketing/registries/landing-pages.json`)
+- **Auto-sync wired** — `marketing/.git/hooks/pre-push` now runs `sync-registry-to-db.py` on every push; sync failure is non-blocking
+
 ### Campaign Tracker V2 — UI Rebuild + API POST Endpoint
 - **Rebuilt** `xavigate-site/admin-campaigns.html` — full V2 redesign (was ~550 lines, now ~640 lines)
   - Landing Pages tab: card grid instead of table rows — each card shows name, LP ID slug, colored status badge, priority tag, pain-family badge, brief/audit/campaign indicators, status dropdown, "↗ open page" link resolving `canonical_landing_path` to live xavigate.com URL, click-to-edit inline notes
