@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Social Media</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html" class="active">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Social Media</span>
+      </div>
+
+      <h1>Social Media</h1>
+      <p class="updated">Location: <code>~/Projects/marketing/</code> (scripts, batches, ops doc) | Canonical doc: <code>marketing/SOCIAL-MEDIA-OPS.md</code> | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>Xavi-post: a stateful, governed workflow for 5 social channels across 2 brands. Content flows from kernel → brief → generation → approval → Late API → scheduled publish. All posts require Steven's explicit "yes."</p>
+
+      <h2>Channels</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Account</th>
+            <th>Posts/Week</th>
+            <th>Format</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Steven LinkedIn</td>
+            <td>Personal</td>
+            <td>4 (Mon/Wed/Fri/Sat)</td>
+            <td>500–1,600 chars</td>
+          </tr>
+          <tr>
+            <td>Steven X</td>
+            <td>@stevenrudolph</td>
+            <td>6 (Mon–Sat)</td>
+            <td>&lt;280 chars</td>
+          </tr>
+          <tr>
+            <td>Steven Facebook</td>
+            <td>Personal</td>
+            <td>2 (Tue/Thu)</td>
+            <td>Cross-post from LinkedIn</td>
+          </tr>
+          <tr>
+            <td>MNI LinkedIn</td>
+            <td>Multiple Natures</td>
+            <td>2 (Tue/Fri)</td>
+            <td>Nature-in-context</td>
+          </tr>
+          <tr>
+            <td>MNI Facebook</td>
+            <td>Multiple Natures</td>
+            <td>2 (Tue/Fri)</td>
+            <td>Cross-post from MNI LinkedIn</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>12 slots/week, ~68 posts/month (Late Build tier: 120/month limit).</p>
+
+      <h2>The Xavi-Post Protocol</h2>
+
+      <ol>
+        <li><strong>Read State</strong> — parse <code>schedule.json</code> + <code>_state.json</code>, identify gaps</li>
+        <li><strong>Report Status</strong> — dashboard of current + next week slots</li>
+        <li><strong>Generate</strong> — trace to kernel (KRN-XXX), use Brief Builder, write content, derive visual fields, show Steven</li>
+        <li><strong>Publish Approved</strong> — upload image to Late <code>/media</code>, create post via Late <code>/posts</code>, update schedule</li>
+        <li><strong>Update State</strong> — increment counters, update drift trackers</li>
+      </ol>
+
+      <h2>Key Files</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>batches/schedule.json</code></td>
+            <td>Master schedule (source of truth)</td>
+          </tr>
+          <tr>
+            <td><code>batches/_state.json</code></td>
+            <td>Drift tracking (engine/style/temperature rotation)</td>
+          </tr>
+          <tr>
+            <td><code>batches/content-ledger.json</code></td>
+            <td>Concept coverage heatmap</td>
+          </tr>
+          <tr>
+            <td><code>01-hopper/pending/</code></td>
+            <td>Posts awaiting approval</td>
+          </tr>
+          <tr>
+            <td><code>01-hopper/approved/</code></td>
+            <td>Posts ready to publish</td>
+          </tr>
+          <tr>
+            <td><code>02-published/</code></td>
+            <td>Archive by week</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Scripts</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Script</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>scripts/xavi-post.py</code></td>
+            <td>Schedule manager, dashboard</td>
+          </tr>
+          <tr>
+            <td><code>scripts/xavi-analytics.py</code></td>
+            <td>Performance, follower growth, pillar report</td>
+          </tr>
+          <tr>
+            <td><code>scripts/content-ledger.py</code></td>
+            <td>Coverage tracking, gap analysis, sync with universal ledger</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Late API</h2>
+
+      <ul>
+        <li><strong>Base:</strong> <code>https://getlate.dev/api/v1</code> (NOT api.getlate.dev)</li>
+        <li><strong>Upload:</strong> <code>POST /media</code> — field name <code>files</code> (plural)</li>
+        <li><strong>Schedule:</strong> <code>POST /posts</code> — nested <code>platforms</code> array + <code>mediaItems</code> + <code>scheduledFor</code> (ISO 8601)</li>
+      </ul>
+
+      <h2>Content System Integration</h2>
+
+      <p>All social content must trace to a kernel in <code>insight-engine/kernels.jsonl</code>. Brief Builder generates channel-specific briefs. Published posts log to <code>content-system/ledger/publications.jsonl</code>. See <a href="content-system.html">docs/systems/content-system.md</a>.</p>
+    </main>
+  </div>
+</body>
+</html>

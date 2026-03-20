@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Diagnostics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html" class="active">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Diagnostics</span>
+      </div>
+
+      <h1>Diagnostics</h1>
+      <p class="updated">Location: <code>~/Projects/diagnostics/</code> | Canonical doc: <code>diagnostics/README.md</code>, <code>diagnostics/docs/product-architecture/XAVIGATE-PRODUCT-ARCHITECTURE-v1.md</code> | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>Unified engine for MN×MI assessment and diagnostic products. One instrument (MNTEST), three diagnostic layers (Alignment → Structure → Positioning), delivered as a staged product staircase.</p>
+
+      <h2>Product Staircase</h2>
+
+      <p>The diagnostic operates in three canonical layers, always in this order. Each product adds one layer.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Layer</th>
+            <th>Input</th>
+            <th>Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Foundation</strong></td>
+            <td>Free</td>
+            <td>Alignment</td>
+            <td>MNTEST (76 items)</td>
+            <td>9 MN + 10 MI scores, Xavigate Insight Assessment (what aligns, what costs, honest boundary)</td>
+          </tr>
+          <tr>
+            <td><strong>Entry Map</strong></td>
+            <td>$29</td>
+            <td>+ Structure</td>
+            <td>6-field short intake (~15-20 min)</td>
+            <td>Situation read — why things feel the way they do, where friction sits</td>
+          </tr>
+          <tr>
+            <td><strong>Xavigate Map</strong></td>
+            <td>$97</td>
+            <td>+ Positioning</td>
+            <td>Deeper intake (decision framing, constraints)</td>
+            <td>Complete diagnostic — person × arrangement × interpretation, what you can change, your options</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>Canonical rules (from XAVIGATE-PRODUCT-ARCHITECTURE-v1.md, LOCKED):</strong></p>
+      <ul>
+        <li>Always Alignment → Structure → Positioning. Never reordered.</li>
+        <li>Foundation is genuinely useful standalone, not a teaser. Honestly incomplete.</li>
+        <li>Entry Map and Xavigate Map are real diagnostics at different depths, not gated demos.</li>
+        <li>No progressive paywalls inside any tier. You pay once, you get the full output at that level.</li>
+      </ul>
+
+      <p><strong>Deprecated products:</strong> MNTEST Report (absorbed into Foundation), Career Explorer (absorbed into Map staircase). No separate SKUs.</p>
+
+      <h2>Other Product Lines</h2>
+
+      <p>Diagnostics is one of three product categories:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Products</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Diagnostics</strong></td>
+            <td>Foundation (free), Entry Map ($29), Xavigate Map ($97)</td>
+          </tr>
+          <tr>
+            <td><strong>Books</strong></td>
+            <td>Free gateway books + paid titles via Gumroad/Stripe. See <code>books/</code></td>
+          </tr>
+          <tr>
+            <td><strong>Courses</strong></td>
+            <td>Renergence Practitioner Training (5 courses, $499 each). See <code>docs/systems/training.md</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Core Engine</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Location</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MN Engine</td>
+            <td><code>engine/routes/mn_engine.py</code></td>
+            <td>Score vectors → capability activation matrix, expression clusters</td>
+          </tr>
+          <tr>
+            <td>Structural Model</td>
+            <td><code>products/map/tools/structural_model.py</code></td>
+            <td>map.json → structural analysis (misalignment, arrangement fit)</td>
+          </tr>
+          <tr>
+            <td>Career Matcher</td>
+            <td><code>engine/careers/matcher/matcher.py</code></td>
+            <td>MN/MI scores → career alignment (649-career database)</td>
+          </tr>
+          <tr>
+            <td>Clustering</td>
+            <td><code>engine/clustering/archetype.py</code></td>
+            <td>Activation clusters → archetype labels</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Pipeline</h2>
+
+      <pre class="docs-diagram">intake.json → generate-map-json.py → map.json
+  → structural_model.py → map_state.json
+  → mn_engine.py → map_state.json (+ capability_state)
+  → auto-generate.py → map.md (narrative)
+  → generate-map-pdf.py (PDF) OR web-report/ (interactive HTML)</pre>
+
+      <h2>Key Tools</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Input → Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>products/map/tools/generate-map-json.py</code></td>
+            <td>intake.json + demand-analysis.md → map.json</td>
+          </tr>
+          <tr>
+            <td><code>products/map/tools/structural_model.py</code></td>
+            <td>map.json → map_state.json</td>
+          </tr>
+          <tr>
+            <td><code>engine/routes/mn_engine.py</code></td>
+            <td>map.json → capability_state in map_state.json</td>
+          </tr>
+          <tr>
+            <td><code>products/map/pdf/generate-map-pdf.py</code></td>
+            <td>map.md → PDF</td>
+          </tr>
+          <tr>
+            <td><code>products/map/tools/generate-map-report.py</code></td>
+            <td>map.json + map_state.json → HTML report</td>
+          </tr>
+          <tr>
+            <td><code>products/map/fulfillment/auto-generate.py</code></td>
+            <td>Orchestrates full pipeline</td>
+          </tr>
+          <tr>
+            <td><code>products/map/tools/entry-map-generate.py</code></td>
+            <td>Short intake → Entry Map narrative</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Validation</h2>
+
+      <ul>
+        <li>4 real case studies in <code>validation/shared/profiles/</code></li>
+        <li>10+ validation profiles in <code>validation/shared/cases/</code></li>
+        <li>15 stress tests in <code>validation/shared/stress/</code></li>
+        <li>Tools: <code>revalidate.py</code>, <code>mn_validation.py</code>, <code>validation-run.py</code>, <code>create-test-case.py</code></li>
+      </ul>
+
+      <h2>Integrations</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Surface</th>
+            <th>How</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>xavigate-api (CF Worker)</td>
+            <td>Scoring endpoints, map intake, report delivery</td>
+          </tr>
+          <tr>
+            <td>xavigate-site</td>
+            <td><code>test.html</code> (MNTEST), <code>entry-map-intake.html</code>, <code>dashboard.html</code> (3-level map status)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Governance Hierarchy</h2>
+
+      <p>GOV-00 > MN-GOV-00/01 > REPORT_GOVERNANCE > XAVIGATE-PRODUCT-ARCHITECTURE-v1 > Diagnostics canon > MN book > Product specs > Templates > Code. See <code>diagnostics/docs/SOURCE-OF-TRUTH.md</code>.</p>
+
+      <h2>Structure</h2>
+
+      <pre class="docs-diagram">diagnostics/
+├── canon/          # LOCKED theory & specs (alignment, mn, shared)
+├── engine/         # Shared computation (routes, clustering, careers, scoring)
+├── products/       # mntest, mntest-report (legacy), career-explorer (legacy), map
+├── adapters/       # Integration seams (api/, site/)
+├── validation/     # Test data + acceptance criteria
+├── benchmark/      # Competitor analysis, must-win scorecard, gap analysis
+├── docs/           # Product architecture (LOCKED), working docs
+└── fonts/          # IBM Plex Sans/Serif, Libre Baskerville</pre>
+    </main>
+  </div>
+</body>
+</html>

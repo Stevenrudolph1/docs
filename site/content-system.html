@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Content System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html" class="active">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Content System</span>
+      </div>
+
+      <h1>Content System</h1>
+      <p class="updated">Location: <code>~/Projects/content-system/</code> | Canonical doc: <code>content-system/CONTENT-SYSTEM-ARCHITECTURE.md</code> | Created: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>The canonical architecture for all content production. Defines vocabulary, component classes, schemas, gates, and the flow from raw sources to published output.</p>
+
+      <h2>Key Files</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>CONTENT-SYSTEM-ARCHITECTURE.md</code></td>
+            <td>Binding canon — vocabulary, flow, rules</td>
+          </tr>
+          <tr>
+            <td><code>registry/components.yaml</code></td>
+            <td>25 registered components across 8 classes</td>
+          </tr>
+          <tr>
+            <td><code>schemas/*.json</code></td>
+            <td>4 schemas: insight, kernel, brief, product</td>
+          </tr>
+          <tr>
+            <td><code>gates/insight-gate.py</code></td>
+            <td>Universal quality gate (15/20, 5 dimensions)</td>
+          </tr>
+          <tr>
+            <td><code>gates/monotony-gate.py</code></td>
+            <td>Portfolio diversity enforcement</td>
+          </tr>
+          <tr>
+            <td><code>gates/imprint-gate.py</code></td>
+            <td>Authority compliance check</td>
+          </tr>
+          <tr>
+            <td><code>builders/brief-builder.py</code></td>
+            <td>Kernel → channel-specific brief</td>
+          </tr>
+          <tr>
+            <td><code>lib/content_system.py</code></td>
+            <td>Shared Python library for all producers</td>
+          </tr>
+          <tr>
+            <td><code>ledger/publications.jsonl</code></td>
+            <td>Cross-channel publication history</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>The Flow</h2>
+
+      <pre class="docs-diagram">Sources → Insight Engine → INSIGHT GATE (15/20) → Kernel Store → Brief Builder → Producer → Ledger
+      <h2>Insight Gate Dimensions</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Hard fail below</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Recognition</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>Compression</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>Reframe</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>Grounding</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Generativity</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Pass: 15/20. Each dimension 0–4.</p>
+
+      <h2>Connected Producers</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Producer</th>
+            <th>Location</th>
+            <th>Channel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Substack</td>
+            <td><code>communication/substack/produce-article.py</code></td>
+            <td>substack</td>
+          </tr>
+          <tr>
+            <td>LinkedIn Articles</td>
+            <td><code>marketing/linkedin-article-generator/pipeline.py</code></td>
+            <td>linkedin-article</td>
+          </tr>
+          <tr>
+            <td>Social Media</td>
+            <td><code>marketing/scripts/xavi-post.py</code></td>
+            <td>social-linkedin, social-x, social-facebook</td>
+          </tr>
+          <tr>
+            <td>XaviStudio</td>
+            <td><code>xavistudio/</code></td>
+            <td>video</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>CLAUDE.md Enforcement</h2>
+
+      <p>Content System Pipeline trigger fires on ALL content keywords (write, article, post, content, generate, etc.) as part of the Content Production Triad (GOV-14 + Copy Gate + Content System Pipeline).</p>
+    </main>
+  </div>
+</body>
+</html>

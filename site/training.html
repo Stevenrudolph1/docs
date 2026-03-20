@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Training</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html" class="active">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Training</span>
+      </div>
+
+      <h1>Training</h1>
+      <p class="updated">Location: <code>~/Projects/training/</code> (specs + content), <code>~/Projects/xavigate-training/</code> (portal) | Canonical doc: <code>training/TRAINING-ARCHITECTURE-2026-02-15.md</code> | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>Renergence Practitioner Training (RPT) — 5 courses teaching diagnostic practice through exercises, drills, walkthroughs, and case work. Delivered via web portal and Telegram bot (Beacon).</p>
+
+      <h2>Course Structure</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Modules</th>
+            <th>Exercises</th>
+            <th>Cases</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Basics</td>
+            <td>3</td>
+            <td>11</td>
+            <td>2</td>
+            <td>$499</td>
+          </tr>
+          <tr>
+            <td>Structure Focus</td>
+            <td>2</td>
+            <td>13</td>
+            <td>2</td>
+            <td>$499</td>
+          </tr>
+          <tr>
+            <td>Alignment Focus</td>
+            <td>2</td>
+            <td>13</td>
+            <td>2</td>
+            <td>$499</td>
+          </tr>
+          <tr>
+            <td>Positioning Focus</td>
+            <td>2</td>
+            <td>13</td>
+            <td>2</td>
+            <td>$499</td>
+          </tr>
+          <tr>
+            <td>Advanced</td>
+            <td>2</td>
+            <td>13</td>
+            <td>3</td>
+            <td>$499</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Books are supplementary reading. All required reading comes from free gateway books.</p>
+
+      <h2>Delivery Channels</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>What</th>
+            <th>Access</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Web portal</strong></td>
+            <td><code>training.xavigate.com</code> — static HTML, CF Pages</td>
+            <td>Magic link auth</td>
+          </tr>
+          <tr>
+            <td><strong>Beacon bot</strong></td>
+            <td>Telegram, OpenClaw agent on M1</td>
+            <td>Invite codes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Case Submission & Review</h2>
+
+      <ol>
+        <li>Practitioner writes case (Situation → Domain ID → Structural Analysis → Intervention → Self-Critique)</li>
+        <li>Submit via form (email MVP)</li>
+        <li>AI review (Claude) against 6-dimension rubric</li>
+        <li>Steven spot-checks calibration</li>
+        <li>Feedback: Pass / Revise / Fail</li>
+        <li>1 free revision, 2nd revision $100 fee</li>
+      </ol>
+
+      <h2>Key Files</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>training/TRAINING-ARCHITECTURE-2026-02-15.md</code></td>
+            <td>Complete course design, case system, book mapping</td>
+          </tr>
+          <tr>
+            <td><code>training/renergence-practitioner/TRAINING-SPEC.md</code></td>
+            <td>RPT specification</td>
+          </tr>
+          <tr>
+            <td><code>xavigate-training/README.md</code></td>
+            <td>Portal overview + deploy instructions</td>
+          </tr>
+          <tr>
+            <td><code>xavigate-training/admin/docs/</code></td>
+            <td>Full admin documentation (10 HTML pages)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Commerce Integration</h2>
+
+      <p>See <a href="commerce.html">docs/systems/commerce.md</a> — Stripe purchases create enrollment rows, magic link auth gates portal access.</p>
+
+      <h2>Beacon Bot Integration</h2>
+
+      <p>Beacon (<code>agents/beacon/</code> on M1) provides Telegram-native course access with auto-enrollment, inline buttons, and access gating via invite codes. See <a href="agents.html">docs/systems/agents.md</a>.</p>
+
+      <h2>Deployment</h2>
+
+      <p>Portal: manual only — <code>cd xavigate-training && npx wrangler pages deploy . --project-name=xavigate-training --branch=main</code>. Git push alone does NOT deploy.</p>
+    </main>
+  </div>
+</body>
+</html>

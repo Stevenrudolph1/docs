@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Xavigate Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html" class="active">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Xavigate Site</span>
+      </div>
+
+      <h1>Xavigate Site</h1>
+      <p class="updated">Location: <code>~/Projects/xavigate-site/</code> | URL: xavigate.com (renergence.com 301s here) | Hosting: Cloudflare Pages — git push to <code>main</code> = auto-deploy | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>The active Xavigate website. Plain HTML5 + CSS + JS, no build system, no framework. ~68 public pages. Product staircase: Foundation (free MNTEST) → Entry Map → Xavigate Map. Book library. Practitioner tools.</p>
+
+      <h2>Page Structure</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Pages</th>
+            <th>Rules</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product pages</td>
+            <td>homepage, audience doors, how-it-works, product pages, utility</td>
+            <td>No backend language (Copy Gate enforced)</td>
+          </tr>
+          <tr>
+            <td>Framework pages</td>
+            <td>multiple-natures, multiple-intelligences, renergence, research</td>
+            <td>Full framework language permitted</td>
+          </tr>
+          <tr>
+            <td>Articles</td>
+            <td>23 article pages</td>
+            <td>GOV-14 writing method</td>
+          </tr>
+          <tr>
+            <td>Book pages</td>
+            <td>41 book landing pages</td>
+            <td>Cover = <code>&lt;img&gt;</code> tags only, never CSS</td>
+          </tr>
+          <tr>
+            <td>Utility</td>
+            <td>faq, contact, 404</td>
+            <td>Standard</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>Page-Type Matrix:</strong> <code>PAGE-TYPE-MATRIX.md</code> — mandatory read before writing any page. Declares page type, audience state, product step, next click, forbidden moves.</p>
+
+      <h2>Copy Gate (Quality Enforcement)</h2>
+
+      <ul>
+        <li><strong>Banned phrases:</strong> <code>config/banned-frontend-phrases.txt</code> (33 phrases)</li>
+        <li><strong>Phrase map:</strong> <code>config/phrase-map.md</code> (banned → allowed translations)</li>
+        <li><strong>Pre-push hook:</strong> <code>.git/hooks/pre-push</code> runs lint automatically</li>
+        <li><strong>Scripts:</strong> <code>scripts/lint-banned-phrases.sh</code>, <code>scripts/site-release-gate.sh</code></li>
+      </ul>
+
+      <h2>Deploy Pipeline</h2>
+
+      <ol>
+        <li><code>scripts/lint-banned-phrases.sh</code> (must pass)</li>
+        <li>Score changed pages via <code>scripts/RELEASE-SCORECARD.md</code> (min 85 product, 75 other)</li>
+        <li><code>scripts/site-release-gate.sh</code> (confirms both)</li>
+        <li>Git push to main (auto-deploys)</li>
+        <li><code>scripts/site-release-gate.sh --post-deploy</code> (production verify)</li>
+      </ol>
+
+      <h2>Key Directories</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>css/landing.css</code></td>
+            <td>Single unified stylesheet</td>
+          </tr>
+          <tr>
+            <td><code>js/</code></td>
+            <td>10 scripts: analytics, auth, checkout, foundation-engine, entry-map-intake, etc.</td>
+          </tr>
+          <tr>
+            <td><code>config/</code></td>
+            <td>Copy Gate SSoT (banned phrases, phrase map)</td>
+          </tr>
+          <tr>
+            <td><code>scripts/</code></td>
+            <td>Release gates, lint, smoke tests, deploy verify</td>
+          </tr>
+          <tr>
+            <td><code>tools/</code></td>
+            <td>AI Toolkit files + zips</td>
+          </tr>
+          <tr>
+            <td><code>images/covers/rendered/</code></td>
+            <td>Book cover PNGs/JPGs (never CSS-rendered)</td>
+          </tr>
+          <tr>
+            <td><code>sr-design-system/</code></td>
+            <td>Design tokens CSS, cover rendering system</td>
+          </tr>
+          <tr>
+            <td><code>books/</code></td>
+            <td>Book landing pages + download links</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Key Integrations</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Integration</th>
+            <th>How</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>xavigate-shop-worker</td>
+            <td>Stripe checkout links from product pages</td>
+          </tr>
+          <tr>
+            <td>xavigate-api</td>
+            <td>MNTEST scoring (<code>test.html</code>), map intake, career reports</td>
+          </tr>
+          <tr>
+            <td>Content System</td>
+            <td>All page copy governed by Content Production Triad</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Cloudflare Config</h2>
+
+      <ul>
+        <li><code>_redirects</code> — old routes → 301, <code>/auth/*</code> → API proxy</li>
+        <li><code>_headers</code> — cache: JS/CSS 60s, HTML no-cache, images 1 day</li>
+      </ul>
+    </main>
+  </div>
+</body>
+</html>

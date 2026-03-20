@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Insight Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html" class="active">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Insight Engine</span>
+      </div>
+
+      <h1>Insight Engine</h1>
+      <p class="updated">Location: <code>~/Projects/insight-engine/</code> | Canonical doc: <code>insight-engine/INSIGHT-ENGINE-V2.md</code> | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>CLI tool that prevents insight collapse through structured observation capture, distillation, novelty gating, and anti-collapse monitoring. Core flow: observations → insights → kernels → content.</p>
+
+      <h2>Data Stores</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>ID Format</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>observations.jsonl</code></td>
+            <td>OBS-XXX</td>
+            <td>Raw patterns from reality (concrete scenes)</td>
+          </tr>
+          <tr>
+            <td><code>insights.jsonl</code></td>
+            <td>INS-XXX</td>
+            <td>Distilled structural truths (scored, gated)</td>
+          </tr>
+          <tr>
+            <td><code>kernels.jsonl</code></td>
+            <td>KRN-XXX</td>
+            <td>Atomic sentences (&lt;15 words) — idea genomes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>CLI Commands</h2>
+
+      <p>All via <code>python3 generate.py {command}</code>:</p>
+
+      <ul>
+        <li><strong>Capture:</strong> <code>observe</code>, <code>insight</code> (manual add)</li>
+        <li><strong>Generate:</strong> <code>distill</code> (obs → insight), <code>cross</code> (lens intersections), <code>invert</code> (flip test), <code>kernel</code> (extract atomic), <code>expand</code> (cross-domain), <code>harvest</code> (from external), <code>content</code> (draft from kernel)</li>
+        <li><strong>Quality:</strong> <code>gate</code> (novelty check), <code>gate --all</code></li>
+        <li><strong>Monitor:</strong> <code>report</code> (health dashboard), <code>brief</code> (daily snapshot)</li>
+      </ul>
+
+      <h2>Quality Controls</h2>
+
+      <ul>
+        <li><strong>Reality Ratio:</strong> 70% observation-derived (60% minimum). Below 60% → gate blocks non-observation insights.</li>
+        <li><strong>Novelty Gate:</strong> Jaccard similarity >0.7 on titles → reject. >0.5 → merge. 3+ shared tags → merge.</li>
+        <li><strong>Domain Diversity:</strong> 10 canonical domains, saturation warning at >40%.</li>
+      </ul>
+
+      <h2>Downstream Consumers</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Consumer</th>
+            <th>How</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Content System</td>
+            <td>Brief Builder reads kernels via <code>query-kernels.py</code></td>
+          </tr>
+          <tr>
+            <td>XaviStudio</td>
+            <td>Kernels → video scripts</td>
+          </tr>
+          <tr>
+            <td>LinkedIn Article Generator</td>
+            <td>Kernels tagged <code>article</code></td>
+          </tr>
+          <tr>
+            <td>Social Media (xavi-post)</td>
+            <td>Kernels tagged <code>social</code></td>
+          </tr>
+          <tr>
+            <td>Book chapters</td>
+            <td>Insight clusters → outlines</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Upstream Sources</h2>
+
+      <p>Observations come from: maps, books, consulting sessions, news/social (<code>harvest</code>), lived experience, Xavi sessions (synced from M1 via <code>sync-xavi-observations.py</code>).</p>
+
+      <h2>Key Files</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>generate.py</code></td>
+            <td>CLI entry point (12 subcommands)</td>
+          </tr>
+          <tr>
+            <td><code>config.py</code></td>
+            <td>Paths, domains, lenses, models, gate thresholds</td>
+          </tr>
+          <tr>
+            <td><code>gate.py</code></td>
+            <td>Novelty checker (Jaccard similarity, reality ratio)</td>
+          </tr>
+          <tr>
+            <td><code>report.py</code></td>
+            <td>Domain coverage, S/A/P matrix, saturation warnings</td>
+          </tr>
+          <tr>
+            <td><code>query-kernels.py</code></td>
+            <td>Helper for downstream consumers</td>
+          </tr>
+          <tr>
+            <td><code>sync-xavi-observations.py</code></td>
+            <td>Syncs M1 observations → observations.jsonl</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

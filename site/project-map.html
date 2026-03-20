@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Project Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html" class="active">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Project Map</span>
+      </div>
+
+      <h1>Project Map</h1>
+      <p class="subtitle">Every folder in <code>~/Projects/</code> and what it is.</p>
+      <p class="updated">Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>Platform (Xavigate product system)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Folder</th>
+            <th>What</th>
+            <th>Scope</th>
+            <th>Has git remote</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>xavigate-site/</code></td>
+            <td>THE website — xavigate.com. Cloudflare Pages, auto-deploy on push.</td>
+            <td>user-facing</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>xavigate-shop-worker/</code></td>
+            <td>Stripe checkout + webhooks + book delivery. Cloudflare Worker + D1.</td>
+            <td>backend</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>xavigate-training/</code></td>
+            <td>Training portal. Cloudflare Pages (manual deploy via wrangler).</td>
+            <td>user-facing</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>xavigate-api/</code></td>
+            <td>API worker — MNTEST scoring, map intake, auth.</td>
+            <td>backend</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>diagnostics/</code></td>
+            <td>Unified diagnostic system: Foundation (free) → Entry Map ($29) → Xavigate Map ($97).</td>
+            <td>engine</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>content-system/</code></td>
+            <td>Content production architecture — schemas, gates, builders, registry.</td>
+            <td>engine</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>insight-engine/</code></td>
+            <td>Content supply chain hub — observations → insights → kernels.</td>
+            <td>engine</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>xavistudio/</code></td>
+            <td>Video production (Remotion). Insight-driven pipeline.</td>
+            <td>content producer</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>marketing/</code></td>
+            <td>Social media (xavi-post, Late API), LinkedIn articles, analytics.</td>
+            <td>content producer</td>
+            <td>yes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Framework (Renergence/MN IP)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Folder</th>
+            <th>What</th>
+            <th>Scope</th>
+            <th>Has git remote</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>books/</code></td>
+            <td>18 manuscripts across 4 themes + book generator pipeline.</td>
+            <td>IP</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>knowledge/</code></td>
+            <td>Canonical SSOT for all framework knowledge (GOV-00–17, publishing, framework).</td>
+            <td>governance</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>renOS/</code></td>
+            <td>Constraint Operating System. 4 compliance checkers.</td>
+            <td>governance engine</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>design-system/</code></td>
+            <td>Root visual design spec: palette, typography, marks, covers.</td>
+            <td>design</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>multiple-natures/</code></td>
+            <td>MN theory, MNTEST question bank, practitioner network.</td>
+            <td>reference</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>training/</code></td>
+            <td>RPT practitioner training spec, course content.</td>
+            <td>course content</td>
+            <td>no (local)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Operations (Steven's infrastructure)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Folder</th>
+            <th>What</th>
+            <th>Scope</th>
+            <th>Has git remote</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>planning/</code></td>
+            <td>Strategy hub — STATUS.md, handoffs, governance index, todos.</td>
+            <td>ops</td>
+            <td>yes</td>
+          </tr>
+          <tr>
+            <td><code>communication/</code></td>
+            <td>Substack repo, MailerLite, partner comms.</td>
+            <td>ops</td>
+            <td>partial (substack)</td>
+          </tr>
+          <tr>
+            <td><code>renergence-intelligence/</code></td>
+            <td>Governance engine — ren.py, signals, scores, profiles.</td>
+            <td>ops</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>skills/</code></td>
+            <td>Claude skill files (SKILL.md per domain).</td>
+            <td>ops</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>personal/</code></td>
+            <td>Photos, headshots, family docs.</td>
+            <td>personal</td>
+            <td>no</td>
+          </tr>
+          <tr>
+            <td><code>career-database/</code></td>
+            <td>MN/MI-tagged job scoring database.</td>
+            <td>data</td>
+            <td>no (local)</td>
+          </tr>
+          <tr>
+            <td><code>docs/</code></td>
+            <td>Internal system documentation hub.</td>
+            <td>meta</td>
+            <td>no (local)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Archive</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Folder</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>archive/</code></td>
+            <td>Deprecated projects (old Xavigate LMS, maps pre-consolidation, mntest pre-consolidation, old website, documentation, etc.)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>On M1 (remote)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Folder</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>~/.openclaw/workspace/</code></td>
+            <td>Xavi agent — system prompts, knowledge, tools</td>
+          </tr>
+          <tr>
+            <td><code>Projects/xavi-platform/</code></td>
+            <td>Renergence Chat bot, daily DM, course tools</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

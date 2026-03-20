@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Agents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html" class="active">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Agents</span>
+      </div>
+
+      <h1>Agents</h1>
+      <p class="updated">Locations: M1 <code>~/.openclaw/workspace/agents/</code>, M4 <code>~/Projects/planning/SSOT-ARCHITECTURE.md</code> | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>Dual-machine agent infrastructure. Xavi (executive AI) and Beacon (course instructor) run on M1 via OpenClaw, while M4 is the canonical source of truth. ACP (Agent Control Protocol) enables structured task dispatch from Xavi to Claude Code.</p>
+
+      <h2>Agents</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Location</th>
+            <th>Model</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Xavi</strong></td>
+            <td>M1 <code>agents/xavi/</code></td>
+            <td>GPT-5.4</td>
+            <td>Executive partner: 3 modes (CFO/Insight/Governance), ACP dispatch, debugging, decision logging</td>
+          </tr>
+          <tr>
+            <td><strong>Beacon</strong></td>
+            <td>M1 <code>agents/beacon/</code></td>
+            <td>GPT-5.4</td>
+            <td>Course instructor: Telegram bot, auto-enrollment, invite codes, lesson delivery</td>
+          </tr>
+          <tr>
+            <td><strong>Claude Code</strong></td>
+            <td>M4</td>
+            <td>Claude Opus 4.6</td>
+            <td>Implementation: receives ACP tasks, builds/fixes/deploys</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Xavi Capabilities</h2>
+
+      <ul>
+        <li><strong>Three Operating Modes:</strong> CFO (revenue), Insight (pattern recognition), Governance (doctrine)</li>
+        <li><strong>ACP Dispatch:</strong> Structures tasks for Claude Code with envelope (TASK_ID, project, expected duration)</li>
+        <li><strong>Debugging Operator:</strong> Monitors Telegram debugging group, SSHes to M4, frames fixes, dispatches</li>
+        <li><strong>Email:</strong> Hardcoded allowlist via <code>tools/send-mail</code></li>
+        <li><strong>Image Generation:</strong> DALL-E (20/day)</li>
+        <li><strong>Insight Logging:</strong> Captures scenes/patterns for Insight Engine</li>
+      </ul>
+
+      <h2>Beacon Capabilities</h2>
+
+      <ul>
+        <li><strong>Auto-Enrollment:</strong> Single course + NOT_ENROLLED = immediate enroll (no asking)</li>
+        <li><strong>Access Gating:</strong> Invite codes via <code>access.py</code> (CODE_REQUIRED flow)</li>
+        <li><strong>Course Tools:</strong> <code>course_status</code>, <code>course_list</code>, <code>course_start</code>, <code>course_lesson</code>, <code>course_submit</code>, <code>course_certificate</code></li>
+        <li><strong>Inline Buttons:</strong> Mandatory for all course messages</li>
+      </ul>
+
+      <h2>ACP Infrastructure</h2>
+
+      <ul>
+        <li>Backend: acpx 0.3.0 + OpenClaw 2026.3.13</li>
+        <li>Config: <code>~/.openclaw/openclaw.json</code> — <code>permissionMode: "approve-all"</code></li>
+        <li><code>--approve-all</code> flag goes BEFORE agent name: <code>acpx --approve-all claude exec "..."</code></li>
+        <li>ANTHROPIC_API_KEY in M1 <code>~/.zshrc</code></li>
+      </ul>
+
+      <h2>M1 ↔ M4 (SSOT Architecture)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Machine</th>
+            <th>Role</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>M4 (MacBook)</td>
+            <td>SSOT — all repos, governance, todos, planning</td>
+            <td>192.168.1.12</td>
+          </tr>
+          <tr>
+            <td>M1 (Mac Mini)</td>
+            <td>Runtime — agents, bots, cron, email</td>
+            <td>192.168.1.43</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ul>
+        <li>SSH both ways: <code>ssh m1</code> / <code>ssh m4</code></li>
+        <li>M4→M1 sync: rsync governance every 6 hours (read-only on M1, chmod 444)</li>
+        <li>M1 writes go through SSH: <code>ssh m4 'command'</code></li>
+        <li>Sync script: <code>planning/scripts/push-governance-m4-to-m1.sh</code></li>
+        <li>Healthcheck: <code>planning/scripts/ssot-healthcheck.sh</code></li>
+      </ul>
+
+      <h2>Key System Prompts (M1)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>agents/xavi/system/XAVI_SYSTEM_PROMPT_v1.md</code></td>
+            <td>Full Xavi behavior</td>
+          </tr>
+          <tr>
+            <td><code>agents/xavi/system/ACP_DISPATCH_PROTOCOL_v1.md</code></td>
+            <td>Task envelope structure, Claude obligations</td>
+          </tr>
+          <tr>
+            <td><code>agents/xavi/system/DEBUGGING_GROUP_PROTOCOL_v1.md</code></td>
+            <td>Bug investigation workflow</td>
+          </tr>
+          <tr>
+            <td><code>agents/beacon/system/BEACON_SYSTEM_PROMPT_v1.md</code></td>
+            <td>Course behavior, auto-enrollment, access gating</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Telegram</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Bot</th>
+            <th>Purpose</th>
+            <th>Chat IDs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Xavi</td>
+            <td>Executive partner</td>
+            <td>Steven: <code>tg:1192545368</code>, Shriya: <code>tg:6951374540</code></td>
+          </tr>
+          <tr>
+            <td>Beacon</td>
+            <td>Course instructor</td>
+            <td>Students via invite codes</td>
+          </tr>
+          <tr>
+            <td>Debugging group</td>
+            <td>Bug reports</td>
+            <td><code>-5232643789</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Tools on M1</h2>
+
+      <p><code>send-mail</code>, <code>generate-image</code>, <code>generate-pdf</code>, <code>knowledge-search</code>, <code>access</code>, <code>todo-tracker</code> (SSH wrapper), <code>course-engine</code>, <code>insight-tool</code>, <code>m4-exec</code>, <code>restart-gateway</code>, <code>m1-infra-audit.sh</code></p>
+    </main>
+  </div>
+</body>
+</html>

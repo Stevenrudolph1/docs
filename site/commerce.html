@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Commerce</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html" class="active">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Commerce</span>
+      </div>
+
+      <h1>Commerce</h1>
+      <p class="updated">Locations: <code>~/Projects/xavigate-shop-worker/</code>, <code>~/Projects/xavigate-training/</code> | Canonical admin docs: <code>xavigate-training/admin/docs/</code> (HTML, 10 pages) | Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>What It Is</h2>
+
+      <p>Two Cloudflare Workers sharing one D1 database handle all commerce: Stripe checkout, webhook fulfillment, enrollment, book delivery, auth, and admin.</p>
+
+      <h2>Architecture</h2>
+
+      <pre class="docs-diagram">xavigate-site (product pages, checkout links)
+  ↓ Stripe Payment Links
+xavigate-shop-worker (CF Worker) — webhook, fulfillment, admin API
+  ↓ D1 write + SES email
+Customer gets: book download email OR course enrollment
+  ↓ if course
+xavigate-training (CF Pages portal) + training worker (auth, progress)
+      <h2>Components</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Location</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Shop Worker</td>
+            <td><code>xavigate-shop-worker/src/index.js</code></td>
+            <td>Stripe checkout, webhooks, product CRUD, admin APIs</td>
+          </tr>
+          <tr>
+            <td>Training Worker</td>
+            <td><code>xavigate-training-worker/</code></td>
+            <td>Auth (magic links), progress tracking, content delivery</td>
+          </tr>
+          <tr>
+            <td>Training Portal</td>
+            <td><code>xavigate-training/</code></td>
+            <td>Static HTML frontend (CF Pages, manual deploy)</td>
+          </tr>
+          <tr>
+            <td>D1 Database</td>
+            <td><code>renergence-training</code></td>
+            <td>Shared: users, enrollments, products, purchases, sessions, maps</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Stripe Flow</h2>
+
+      <ol>
+        <li>User clicks checkout → shop worker creates Stripe session (<code>allow_promotion_codes: true</code>)</li>
+        <li>Stripe fires <code>checkout.session.completed</code> webhook</li>
+        <li>Shop worker validates signature, routes by product type:
+          <ul>
+            <li><strong>Courses:</strong> Parse <code>course_ids</code> JSON, INSERT OR IGNORE per course (idempotent)</li>
+            <li><strong>Books:</strong> Send SES email with download links</li>
+            <li><strong>Maps:</strong> Create map row (status <code>awaiting_intake</code>)</li>
+          </ul>
+        </li>
+        <li>Records purchase with <code>stripe_session_id</code></li>
+      </ol>
+
+      <h2>Auth (Magic Links)</h2>
+
+      <ol>
+        <li>User enters email → POST <code>/auth/request</code></li>
+        <li>Check allowlist OR active enrollment → generate 64-char hex token (15-min TTL)</li>
+        <li>Send email via SES with verification link</li>
+        <li>Click → validate, create session (7-day TTL), set <code>ren_session</code> cookie</li>
+        <li>Admin emails: <code>steven@multiplenatures.com</code>, <code>shriya@multiplenatures.com</code></li>
+      </ol>
+
+      <h2>D1 Key Tables</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Table</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>users</code></td>
+            <td>Identity (email, name, stripe_customer_id)</td>
+          </tr>
+          <tr>
+            <td><code>enrollments</code></td>
+            <td>Per-course access (UNIQUE email+course_id)</td>
+          </tr>
+          <tr>
+            <td><code>products</code></td>
+            <td>Catalog (type, price, course_ids JSON, download URLs)</td>
+          </tr>
+          <tr>
+            <td><code>purchases</code></td>
+            <td>Payment history (stripe session/intent IDs)</td>
+          </tr>
+          <tr>
+            <td><code>sessions</code> / <code>magic_links</code></td>
+            <td>Auth state</td>
+          </tr>
+          <tr>
+            <td><code>maps</code></td>
+            <td>Diagnostic product tracking (status lifecycle)</td>
+          </tr>
+          <tr>
+            <td><code>analytics_events</code></td>
+            <td>Behavior tracking (pages, UTM, geo)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Email (AWS SES v2)</h2>
+
+      <ul>
+        <li>From: <code>Xavigate &lt;no-reply@multiplenatures.com&gt;</code></li>
+        <li>Region: us-east-1, AWS Sig V4</li>
+        <li>Types: magic links, book delivery, map status</li>
+      </ul>
+
+      <h2>Admin APIs</h2>
+
+      <p>Bearer token auth. Endpoints at shop worker: <code>/admin/enrollments</code>, <code>/admin/purchases</code>, <code>/admin/products</code>, <code>/admin/grant-book</code>, <code>/admin/analytics/*</code>, <code>/admin/stripe/*</code>.</p>
+
+      <h2>Deployment</h2>
+
+      <ul>
+        <li><strong>Shop worker:</strong> Git push auto-deploys via Cloudflare</li>
+        <li><strong>Training portal:</strong> Manual only — <code>cd xavigate-training && npx wrangler pages deploy . --project-name=xavigate-training --branch=main</code></li>
+      </ul>
+
+      <h2>Detailed Docs</h2>
+
+      <p>Full API specs, schema diagrams, and workflows in <code>xavigate-training/admin/docs/</code> (architecture, database, auth-flow, enrollment-flow, api-training, api-shop, admin-guide, stripe-testing, deployment, troubleshooting).</p>
+    </main>
+  </div>
+</body>
+</html>

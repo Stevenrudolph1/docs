@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Changelog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html" class="active">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Changelog</span>
+      </div>
+
+      <h1>Changelog</h1>
+      <p class="subtitle">All significant system changes, newest first. Not strategic decisions (that's STATUS.md). Not handoffs (that's planning/handoffs/). This is: what changed in the actual system.</p>
+
+      <hr>
+
+      <h2>2026-03-17</h2>
+
+      <h3>Documentation System — Full Build</h3>
+      <ul>
+        <li><strong>Created</strong> 7 system pages in <code>docs/systems/</code>: diagnostics, commerce, training, social-media, insight-engine, xavigate-site, agents</li>
+        <li><strong>Wired</strong> CLAUDE.md: Session Start scans changelog, Work Tracking adds changelog entries, Domain-Specific Knowledge table updated</li>
+        <li><strong>Wired</strong> Xavi system prompt on M1: session start scans M4 docs changelog via SSH</li>
+      </ul>
+
+      <h3>Centralized Documentation System Created</h3>
+      <ul>
+        <li><strong>Created</strong> <code>docs/</code> hub with canonical system architecture, changelog, project map, dependencies, and systems docs</li>
+        <li><strong>Scope:</strong> For Steven, Claude, and Xavi to operate the project ecosystem as a system</li>
+        <li><strong>Files created:</strong>
+          <ul>
+            <li><code>docs/README.md</code> — entry point and navigation rules</li>
+            <li><code>docs/architecture.md</code> — full stack diagram, integration points, data stores</li>
+            <li><code>docs/changelog.md</code> — this file, system change log</li>
+            <li><code>docs/project-map.md</code> — directory inventory and scope assignments</li>
+            <li><code>docs/dependencies.md</code> — what connects to what, breaking points</li>
+            <li><code>docs/systems/content-system.md</code> — detailed content system architecture</li>
+          </ul>
+        </li>
+        <li><strong>Governance:</strong> Integrated with CLAUDE.md auto-load triggers and Session-End Protocol</li>
+      </ul>
+
+      <h3>Content System Architecture — Built and Wired</h3>
+      <ul>
+        <li><strong>Created</strong> <code>content-system/</code> — canonical content production architecture
+          <ul>
+            <li>4 JSON schemas (insight, kernel, brief, product)</li>
+            <li>3 gates (insight-gate.py 15/20, monotony-gate.py, imprint-gate.py)</li>
+            <li>Shared Python lib (<code>lib/content_system.py</code>)</li>
+            <li>Brief Builder (<code>builders/brief-builder.py</code>)</li>
+            <li>Component Registry (<code>registry/components.yaml</code> — 25 components)</li>
+            <li>Publication Ledger (<code>ledger/publications.jsonl</code>)</li>
+          </ul>
+        </li>
+        <li><strong>Wired</strong> Substack producer (<code>communication/substack/produce-article.py</code>) — new, replaces <code>generate-article.sh</code></li>
+        <li><strong>Wired</strong> LinkedIn Article Generator (<code>marketing/linkedin-article-generator/content_system_bridge.py</code>) — kernel support added</li>
+        <li><strong>Wired</strong> XaviStudio insight gate (<code>xavistudio/INSIGHT-GATE.md</code>) — aligned to universal 5 dimensions, threshold raised to 15</li>
+        <li><strong>Wired</strong> Social media ops (<code>marketing/SOCIAL-MEDIA-OPS.md</code>) — content system integration section</li>
+        <li><strong>Wired</strong> Content ledger (<code>marketing/scripts/content-ledger.py</code>) — sync/export to universal ledger</li>
+        <li><strong>Wired</strong> Insight Engine (<code>insight-engine/config.py</code>, <code>gate.py</code>, <code>generate.py</code>) — schema-compliant output</li>
+        <li><strong>Updated</strong> CLAUDE.md — Content Production Triad (3 chained triggers), self-diagnosing rule</li>
+        <li><strong>Updated</strong> MEMORY.md — Content Production Triad at top</li>
+        <li><strong>Updated</strong> GOV-12 — Content Production Triad section</li>
+        <li><strong>Updated</strong> knowledge/REGISTRY.md — GOV-12/14/17 + content-system section</li>
+        <li><strong>Updated</strong> PROJECT-INDEX.md — content-system added</li>
+        <li><strong>Created</strong> Xavi awareness file on M1 (<code>CONTENT_SYSTEM_AWARENESS_v1.md</code>)</li>
+      </ul>
+
+      <h3>Xavigate Insight Assessment Report Redesign</h3>
+      <ul>
+        <li>Rebuilt as 8-screen guided recognition experience</li>
+        <li>Pattern families (30 authored), tension engine, misread/reframe</li>
+        <li>New file <code>xavigate-site/js/foundation-engine.js</code> (~600 lines)</li>
+        <li>Deployed to production</li>
+      </ul>
+
+      <h3>Oggie Agent Setup (Michael Rudolph)</h3>
+      <ul>
+        <li>OpenClaw agent scaffolding for Michael on Cloudflare Moltworker</li>
+        <li>System prompt, knowledge folder, email tool, website update spec</li>
+      </ul>
+    </main>
+  </div>
+</body>
+</html>

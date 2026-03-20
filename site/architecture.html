@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>System Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html" class="active">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Architecture</span>
+      </div>
+
+      <h1>System Architecture</h1>
+      <p class="updated">Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>The Stack</h2>
+
+      <pre class="docs-diagram">┌─────────────────────────────────────────────────────┐
+│                    USER SURFACES                      │
+│  xavigate.com  │  training.xavigate.com  │  Telegram │
+│  (Cloudflare   │  (Cloudflare Pages +    │  (OpenClaw│
+│   Pages)       │   Worker + D1)          │   M1)     │
+└───────┬────────┴──────────┬──────────────┴─────┬─────┘
+        │                   │                    │
+┌───────┴───────┐  ┌────────┴────────┐  ┌───────┴──────┐
+│  xavigate-    │  │  xavigate-      │  │  Xavi Agent  │
+│  shop-worker  │  │  api             │  │  (M1)        │
+│  (CF Worker)  │  │  (CF Worker)    │  │              │
+│  Stripe,D1,   │  │  MNTEST, Map    │  │  Beacon Bot  │
+│  SES email    │  │  scoring, auth  │  │  (courses)   │
+└───────────────┘  └────────┬────────┘  └──────────────┘
+                            │
+┌───────────────────────────┴──────────────────────────┐
+│                  DIAGNOSTIC ENGINE                    │
+│  diagnostics/                                        │
+│  Foundation (free) → Entry Map ($29) → Xavigate Map ($97)│
+│  engine/ (MN engine, structural model)               │
+│  canon/ (locked theory specs)                        │
+└──────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────┐
+│               CONTENT PRODUCTION SYSTEM               │
+│                                                       │
+│  insight-engine/     content-system/     Producers:   │
+│  observations →      schemas, gates,     • Substack   │
+│  insights →          brief builder,      • LinkedIn   │
+│  kernels             registry, ledger    • xavi-post  │
+│                                          • XaviStudio │
+│  Flow: Source → Insight Gate (15/20) → Kernel →       │
+│        Brief Builder → Producer → Ledger              │
+└──────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────┐
+│                 FRAMEWORK / IP LAYER                  │
+│                                                       │
+│  books/ (18 manuscripts)    knowledge/ (GOV-00–17)   │
+│  renOS/ (4 compliance       design-system/ (tokens,  │
+│   checkers)                  marks, covers)           │
+│  multiple-natures/ (MN      training/ (RPT spec,     │
+│   theory, MNTEST Q-bank)     course content)         │
+└──────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────┐
+│                   OPERATIONS LAYER                    │
+│                                                       │
+│  planning/ (STATUS.md, handoffs, governance, todos)  │
+│  renergence-intelligence/ (ren.py, signals, scores)  │
+│  communication/ (Substack repo, MailerLite, partners)│
+│  marketing/ (social media, Late API, analytics)      │
+│  skills/ (Claude skill files)                        │
+└──────────────────────────────────────────────────────┘
+
+Infrastructure:
+  M4 (MacBook Pro) — SSOT for all code, data, governance
+  M1 (Mac Mini)    — Xavi agent, Beacon bot, cron jobs
+  Cloudflare       — Pages (site, training), Workers (shop, API), D1 (database)
+  Stripe           — Payments (books, courses, maps)
+  AWS SES          — Transactional email (steven@xavigate.com)
+  Late API         — Social media scheduling (5 channels)
+  MailerLite       — Email lists (~400 subscribers)
+  GitHub           — Source repos (planning, marketing, knowledge, substack, books)</pre>
+
+      <h2>Key Integration Points</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>How</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Insight Engine</td>
+            <td>Content System</td>
+            <td>Kernels store (<code>kernels.jsonl</code>) is the shared data</td>
+          </tr>
+          <tr>
+            <td>Content System</td>
+            <td>All Producers</td>
+            <td>Brief Builder generates channel-specific briefs</td>
+          </tr>
+          <tr>
+            <td>Content System</td>
+            <td>Publication Ledger</td>
+            <td>Every published piece logs here</td>
+          </tr>
+          <tr>
+            <td>Monotony Gate</td>
+            <td>Publication Ledger</td>
+            <td>Reads recent pubs to check diversity</td>
+          </tr>
+          <tr>
+            <td>xavigate-site</td>
+            <td>xavigate-shop-worker</td>
+            <td>Stripe checkout links, book delivery</td>
+          </tr>
+          <tr>
+            <td>xavigate-site</td>
+            <td>xavigate-api</td>
+            <td>MNTEST scoring, map intake</td>
+          </tr>
+          <tr>
+            <td>xavigate-training</td>
+            <td>xavigate-api</td>
+            <td>Course progress, auth</td>
+          </tr>
+          <tr>
+            <td>diagnostics</td>
+            <td>xavigate-api</td>
+            <td>Engine routes, scoring</td>
+          </tr>
+          <tr>
+            <td>Xavi (M1)</td>
+            <td>M4 (SSH)</td>
+            <td>Reads code, governance, tasks</td>
+          </tr>
+          <tr>
+            <td>renOS checkers</td>
+            <td>All content</td>
+            <td>Compliance validation</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Data Stores</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Store</th>
+            <th>Location</th>
+            <th>Format</th>
+            <th>What</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Observations</td>
+            <td><code>insight-engine/observations.jsonl</code></td>
+            <td>JSONL</td>
+            <td>Raw observations from reality</td>
+          </tr>
+          <tr>
+            <td>Insights</td>
+            <td><code>insight-engine/insights.jsonl</code></td>
+            <td>JSONL</td>
+            <td>Scored candidate insights</td>
+          </tr>
+          <tr>
+            <td>Kernels</td>
+            <td><code>insight-engine/kernels.jsonl</code></td>
+            <td>JSONL</td>
+            <td>Approved, producible insight units</td>
+          </tr>
+          <tr>
+            <td>Publications</td>
+            <td><code>content-system/ledger/publications.jsonl</code></td>
+            <td>JSONL</td>
+            <td>Everything published, all channels</td>
+          </tr>
+          <tr>
+            <td>Component Registry</td>
+            <td><code>content-system/registry/components.yaml</code></td>
+            <td>YAML</td>
+            <td>All content system components</td>
+          </tr>
+          <tr>
+            <td>Social Schedule</td>
+            <td><code>marketing/batches/schedule.json</code></td>
+            <td>JSON</td>
+            <td>Weekly social media calendar</td>
+          </tr>
+          <tr>
+            <td>Content Ledger</td>
+            <td><code>marketing/batches/content-ledger.json</code></td>
+            <td>JSON</td>
+            <td>Concept coverage tracking</td>
+          </tr>
+          <tr>
+            <td>Todo Tracker</td>
+            <td><code>planning/todo-tracker/data/tasks.json</code></td>
+            <td>JSON</td>
+            <td>All tasks across projects</td>
+          </tr>
+          <tr>
+            <td>ISBN Registry</td>
+            <td><code>planning/book-management/isbn-data.json</code></td>
+            <td>JSON</td>
+            <td>Book ISBNs and production status</td>
+          </tr>
+          <tr>
+            <td>D1 Database</td>
+            <td>Cloudflare D1</td>
+            <td>SQLite</td>
+            <td>Users, enrollments, products, purchases</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

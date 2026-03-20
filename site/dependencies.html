@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dependencies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <div class="docs-layout">
+    <nav class="docs-sidebar">
+      <div class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Overview</div>
+          <a href="index.html">Home</a>
+          <a href="architecture.html">Architecture</a>
+          <a href="project-map.html">Project Map</a>
+          <a href="dependencies.html" class="active">Dependencies</a>
+          <a href="changelog.html">Changelog</a>
+        </div>
+
+        <div class="docs-nav-section">
+          <div class="docs-nav-section-title">Systems</div>
+          <a href="diagnostics.html">Diagnostics</a>
+          <a href="commerce.html">Commerce</a>
+          <a href="training.html">Training</a>
+          <a href="xavigate-site.html">Xavigate Site</a>
+          <a href="content-system.html">Content System</a>
+          <a href="insight-engine.html">Insight Engine</a>
+          <a href="social-media.html">Social Media</a>
+          <a href="agents.html">Agents</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-content">
+      <div class="docs-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>→</span>
+        <span>Dependencies</span>
+      </div>
+
+      <h1>Dependencies</h1>
+      <p class="subtitle">What connects to what. If you change X, what else might break.</p>
+      <p class="updated">Last updated: 2026-03-17</p>
+
+      <hr>
+
+      <h2>Content Production Chain</h2>
+
+      <pre class="docs-diagram">insight-engine/observations.jsonl
+  ↓ (generate.py distill/kernel)
+insight-engine/insights.jsonl
+  ↓ (insight-gate.py scores)
+insight-engine/kernels.jsonl
+  ↓ (brief-builder.py reads)
+content-system/builders/brief-builder.py
+  ↓ (generates briefs, checks monotony gate)
+content-system/ledger/publications.jsonl ←── monotony-gate.py reads
+  ↓
+Channel Producers:
+  • communication/substack/produce-article.py
+  • marketing/linkedin-article-generator/pipeline.py
+  • marketing/scripts/xavi-post.py
+  • xavistudio/ (manual, follows INSIGHT-GATE.md)</pre>
+
+      <p><strong>If you change:</strong> <code>content-system/schemas/*.json</code> → check all producers still comply</p>
+      <p><strong>If you change:</strong> <code>insight-engine/kernels.jsonl</code> format → check <code>content-system/lib/content_system.py</code> still reads it</p>
+      <p><strong>If you change:</strong> gate thresholds → update <code>content-system/gates/</code>, XaviStudio INSIGHT-GATE.md, CONTENT-SYSTEM-ARCHITECTURE.md</p>
+
+      <h2>Commerce Chain</h2>
+
+      <pre class="docs-diagram">xavigate-site/ (product pages, checkout links)
+  ↓ (Stripe Payment Links)
+xavigate-shop-worker/ (webhook handler)
+  ↓ (D1 write + SES email)
+Customer gets: book download email OR course enrollment
+  ↓ (if course)
+xavigate-training/ (portal) + xavigate-api/ (progress tracking)</pre>
+
+      <p><strong>If you change:</strong> Stripe products → update shop worker product table + site payment links</p>
+      <p><strong>If you change:</strong> D1 schema → update shop worker AND training worker AND API worker</p>
+
+      <h2>Diagnostic Chain</h2>
+
+      <pre class="docs-diagram">xavigate-site/test.html (MNTEST 76Q)
+  ↓ (scores submitted → Foundation layer free)
+xavigate-api/ (scoring endpoint)
+  ↓ (results stored)
+xavigate-site/entry-map-intake.html (6-field short intake → Entry Map $29)
+  ↓
+diagnostics/engine/ (MN engine, structural model)
+  ↓
+diagnostics/products/map/ (Xavigate Map $97 — all 3 layers)</pre>
+
+      <p><strong>Product staircase:</strong> Foundation (free) → Entry Map ($29) → Xavigate Map ($97)</p>
+      <p><strong>If you change:</strong> MNTEST questions → update <code>diagnostics/products/mntest/question-bank/</code></p>
+      <p><strong>If you change:</strong> MN engine scoring → revalidate with <code>diagnostics/validation/</code></p>
+
+      <h2>Governance Chain</h2>
+
+      <pre class="docs-diagram">knowledge/governance/GOV-00–17
+  ↓ (referenced by)
+renOS/checkers/ (compliance enforcement)
+  ↓ (used by)
+All content producers, book generator, training content</pre>
+
+      <p><strong>If you change:</strong> a GOV doc → check renOS checkers still align, check CLAUDE.md triggers</p>
+
+      <h2>Agent Chain (M1 ↔ M4)</h2>
+
+      <pre class="docs-diagram">M4 (SSOT): all code, data, governance
+  ↑↓ SSH
+M1: Xavi agent, Beacon bot, cron jobs
+  • Xavi reads M4 code/governance via SSH
+  • Todo tracker on M4, thin wrapper on M1
+  • Governance sync: planning/scripts/push-governance-m4-to-m1.sh</pre>
+
+      <p><strong>If you change:</strong> file paths on M4 → Xavi's SSH commands may break</p>
+      <p><strong>If you change:</strong> governance docs → run sync script to M1</p>
+    </main>
+  </div>
+</body>
+</html>
