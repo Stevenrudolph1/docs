@@ -1,3 +1,37 @@
+## 2026-03-22
+
+### Student Map Pipeline — Phases 1-3 Deployed (xavigate-api, xavigate-site, diagnostics)
+- **Database schema:** Added `map_mode` column (TEXT, DEFAULT 'professional') to `intake_profiles` (canonical) and `maps` (denormalized), added `student_school` column to `intake_profiles`, added 27 student-specific columns to `intake_situations` in 6 logical blocks
+- **API endpoints:** `POST /intake/profile` accepts `map_mode` and `student_school` parameters; `POST /intake/situation` accepts 27 student intake fields; `POST /intake/submit` loads `map_mode` from DB source of truth and denormalizes once to `maps` table
+- **New files:** `xavigate-api/src/student-map-prompts.js` (4 student system prompts + spec), `xavigate-api/src/student-map-report-template.js` (print HTML + tabbed web report renderer)
+- **Modified files:** `xavigate-api/src/map-workflow.js` (13 student branch points across all generation steps), `xavigate-api/src/index.js` (profile/situation/submit handlers)
+- **Intake form:** `xavigate-site/map-intake.html` updated with Step 0 mode selector (student/professional cards), student-specific profile fields (school, stage), 6-section student situation form (Stage/Context, Options, Pull/Drain, Environment, Pressure/Fear, Horizon)
+- **Pre-deploy review:** Fixed 4 critical issues — removed map_mode fallback logic (Rule 1 violation), fixed hardcoded PROMPT_BUNDLE_VERSION, added student_school to migration, accepted 3 orphaned enrichment fields as-is (handled by prompts)
+
+### Student Map Pipeline — Phase 4-5 Deferred
+- Phase 4: End-to-end testing (purchase test Map, complete student intake, verify generation + web report + PDF + dashboard)
+- Phase 5: Wire `validate-student-report.py` checks into pipeline post-Pass 4 (currently post-hoc only — known regression vector)
+- Deferred items: form UI for 3 enrichment fields, parent/guardian consent flow, student-specific marketing page updates
+
+---
+
+## 2026-03-21
+
+### Commerce — Gift a Map Feature Shipped
+- **Added** `xavigate-site/gift-map.html` — dedicated gift landing page (4 audience cards, comparison, 3-step flow, personalization + email preview)
+- **Added** `POST /checkout-gift` endpoint in both `xavigate-api/src/index.js` and `xavigate-shop-worker/src/index.js`
+- **Added** `fulfillGiftPurchase()` in both workers — creates Stripe coupon (100% off, scoped to Map product `prod_U99j5rE3mRTSP2`), generates promo code, emails recipient + buyer
+- **Added** D1 `gifts` table — tracks buyer, recipient, promo code, Stripe IDs, status flow (pending → sent → redeemed)
+- **Updated** map fulfillment path in both workers — detects gift redemption, sets `redeemed_at` timestamp
+- **Updated** site navigation — pink gift icon + "Gift a Map" link (all pages + profile dropdown)
+- **Updated** `xavigate-map.html` — gift CTA after pricing section + final CTA
+- **Updated** `dashboard.html` — "Share the clarity" card for Map owners
+- **Updated** `index.html` — "Gift clarity to someone" link in final CTA
+- **Stripe:** New product `prod_UBhZQ5BTTW0amq` (price `price_1TDKARAD6mE4uoyE0J8dVx8y`), D1 product row type=gift
+- **Key safeguards:** idempotent webhook, message sanitization (HTML stripped, 500 char limit), email failure → status `failed`, promo code collision retry (5 attempts), buyer email SOT = Stripe session
+
+---
+
 # Changelog
 
 All significant system changes, newest first. Not strategic decisions (that's STATUS.md). Not handoffs (that's planning/handoffs/). This is: what changed in the actual system.
@@ -5,6 +39,57 @@ All significant system changes, newest first. Not strategic decisions (that's ST
 ---
 
 ## 2026-03-20
+
+### Diagnostics / Offer Study — Student Page Audit Started
+- **Added** `planning/handoffs/2026-03-21-02-student-map-study.md`
+- **Completed:** Phase 1 audit of the current public student page at `xavigate.com/for-students`
+- **Purpose:** keep a running study of student offer, audience, pain families, parent layer, and implementation coherence in one easy-to-find place
+
+### Diagnostics — Student Map v1 Implementation Handoff Drafted
+- **Added** `planning/handoffs/2026-03-21-01-student-map-v1-implementation-handoff.md`
+- **Purpose:** give Claude a concrete build handoff for implementing Student Map v1 as a wrapper mode on top of the current Map architecture
+
+### Diagnostics — Student Map Wrapper Logic v1 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-WRAPPER-LOGIC-v1.md`
+- **Defined:** translation layer from current Map architecture + student intake into student-specific signals, buckets, and 8-section report output
+
+### Diagnostics — Student Map Sample Output 03 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-SAMPLE-OUTPUT-03-performing-at-cost.md`
+- **Purpose:** test the student report against the hidden-cost case where the student is functioning on paper while paying too much internally
+
+### Diagnostics — Student Map Sample Output 02 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-SAMPLE-OUTPUT-02-design-business.md`
+- **Purpose:** test the student report against the design/business split case (alive vs safe, approved vs workable)
+
+### Diagnostics — Student Map Sample Output 01 Updated
+- **Updated** `diagnostics/docs/STUDENT-MAP-SAMPLE-OUTPUT-01-medical-track.md`
+- **Change:** added the new `Student Signal Snapshot` layer so the sample output matches the updated report template
+
+### Diagnostics — Student Map Report Template Updated for Signal Layer
+- **Updated** `diagnostics/docs/STUDENT-MAP-REPORT-TEMPLATE-v1.md`
+- **Change:** restored the score/signal layer as a student-readable `Student Signal Snapshot` section at the front of the report
+
+### Diagnostics — Student Map Sample Output 01 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-SAMPLE-OUTPUT-01-medical-track.md`
+- **Purpose:** test the student report tone and section structure against the high-performing medical-track case
+
+### Diagnostics — Student Map Sample Cases v1 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-SAMPLE-CASES-v1.md`
+- **Defined:** 5 test cases covering prestige pressure, alive-vs-safe choice, hidden cost in a respected path, repeated restart pattern, and family-pressure distortion
+
+### Diagnostics — Student Map Report Template v1 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-REPORT-TEMPLATE-v1.md`
+- **Defined:** 7-section student report structure focused on path/environment clarity, confusion reframe, and next-step guidance
+
+### Diagnostics — Student Map Intake v1 Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-INTAKE-v1.md`
+- **Scope:** current context, options, pull vs drain, educational environment, pressure/fear, decision horizon
+- **Purpose:** ensure Student Map output answers student questions in student reality instead of defaulting to adult-role framing
+
+### Diagnostics — Student Map Spec Drafted
+- **Added** `diagnostics/docs/STUDENT-MAP-SPEC-v1.md`
+- **Decision:** start with a Student Map mode layered on the current Map architecture, not a fully separate engine
+- **Scope:** student intake, student examples, student output framing, path-choice + path-distress cases
 
 ### Landing Pages — All 3 Launch LPs Ready, Migrated to /landing/
 - **Audited + fixed** `landing/no-traction.html` (LP-002) — LG2 gate failure resolved (paid tier CTA made non-linked), proof quotes moved adjacent to mid-page and bottom CTAs. Score: 153 → 159/200. All 8 gates pass.
