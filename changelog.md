@@ -1,4 +1,50 @@
+## 2026-03-25
+
+### Xavigate API — E2E Pipeline Fixes (3 bugs)
+- **Modified** `xavigate-api/src/map-workflow.js` — renderHTML step now returns R2 key instead of full HTML (was exceeding CF Workflow 1MiB step output limit, blocking all map deliveries)
+- **Modified** `xavigate-api/src/index.js` — added `POST /internal/maps/enqueue?id=N` admin endpoint to trigger readiness check + queue enqueue
+- **Modified** `xavigate-api/src/index.js` — `/maps/mine` endpoint now returns `web_report_url` and `pdf_url` (dashboard "View Report" button was never showing)
+- **Impact:** Map generation pipeline now completes end-to-end. Dashboard shows both PDF download and web report view buttons.
+
+## 2026-03-24
+
+### Diagnostics — Client Privacy Gate (new gate/validator)
+- **New** `diagnostics/config/real-clients.txt` — blocklist of real client names
+- **New** `diagnostics/gates/client-privacy-gate.sh` — shell scanner (flags real names in any file/directory)
+- **New** `diagnostics/gates/client_privacy.py` — Python module for generators (`check_file()`, `check_text()`)
+- **Modified** `xavigate-site/scripts/site-release-gate.sh` — added Client Privacy gate (Gate 2, pre-push)
+- **Modified** `diagnostics/products/map/pdf/generate-map-pdf.py` — post-generation privacy warning
+- **Impact:** Real client data cannot silently reach public-facing artifacts. Gate blocks site deploys if real names detected.
+
+### Xavigate API + Site — Regional Pricing & Stripe Adaptive Pricing
+- **Modified** `xavigate-api/src/index.js` — added `locale` and `adaptive_pricing[enabled]` params to all 3 Stripe checkout session endpoints (single item, cart, gift)
+- **New** `xavigate-site/data/exchange-rates.json` — static FX rates for 10 currencies
+- **New** `xavigate-site/js/regional-pricing.js` — client-side price conversion module (auto-detect currency from browser locale, convert USD to local with ≈ prefix)
+- **New** `xavigate-site/scripts/update-exchange-rates.sh` — weekly rate refresh script
+- **Modified** `xavigate-site/cart-button-handler.js` — `fmtPrice()` uses regional pricing when available
+- **Modified** 32 HTML pages — added `data-usd-cents` attributes (56 total) and `regional-pricing.js` script tags
+- **Impact:** Non-USD users see approximate local prices on site (e.g., "≈ 8,62€"). Stripe checkout shows exact local currency via Adaptive Pricing. USD users unaffected.
+- **Docs:** `planning/handoffs/2026-03-24-05-xavigate-regional-pricing.md`
+
+### Xavigate Site — Cart French Localization Fix
+- **Modified** `cart-button-handler.js` — added `fmtPrice()` locale-aware price formatter, replaced 4 hardcoded `$X.XX` formats
+- **Modified** `fr/books.html` — 18 `data-product-name` attributes updated from English to French book titles
+- **Modified** `fr/book-organizations-are-built-wrong.html` — 1 `data-product-name` updated to French
+- **Impact:** French users now see fully localized cart: buttons ("Ajouter au panier — 9,99 $"), drawer ("Panier"), prices ("9,99 $"), checkout ("Payer")
+- **Docs:** `planning/handoffs/2026-03-24-04-xavigate-site-cart-french-fix.md`
+
+---
+
 ## 2026-03-22
+
+### Backup System — restic + Cloudflare R2
+- **New project:** `~/Projects/backups/` — complete backup infrastructure
+- **Daily encrypted incremental backups:** restic → Cloudflare R2 bucket (`sr-backups`)
+- **Scope:** M4 (14.9 GB → 9.6 GB), M1 (2.25 GB → 1.76 GB), Cloudflare infrastructure (D1 SQL dumps, DNS records, R2 inventories)
+- **Automation:** cron-scheduled daily backup + prune. M4: 3:00 AM. M1: 3:30 AM. Retention: 30 daily, 12 weekly, 6 monthly.
+- **Cost:** ~$0.17/month. Complete disaster recovery for both machines.
+- **Docs:** `planning/handoffs/2026-03-23-01-backups-r2-restic-setup.md`
+
 
 ### Student Map Pipeline — Phases 1-3 Deployed (xavigate-api, xavigate-site, diagnostics)
 - **Database schema:** Added `map_mode` column (TEXT, DEFAULT 'professional') to `intake_profiles` (canonical) and `maps` (denormalized), added `student_school` column to `intake_profiles`, added 27 student-specific columns to `intake_situations` in 6 logical blocks
