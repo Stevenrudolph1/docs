@@ -1,5 +1,16 @@
 ## 2026-03-25
 
+### Xavigate API + Site — User Default Language
+- **New** `xavigate-api/migrations/016-add-user-locale.sql` — adds `locale TEXT NOT NULL DEFAULT 'en'` to users table
+- **Modified** `xavigate-api/src/index.js` — `getOrCreateUser()` accepts locale param (seeded on INSERT, never overwrites existing); GET/PUT /profile returns/accepts locale; PUT cascades to pulse_users; POST /pulse-subscribe and webhook reactivation copy users.locale; removed 3 assessment-locale fallback lookups (sendBookEmail, gift email, email-change verification)
+- **Modified** `xavigate-site/settings.html` — language selector (English / Français) in Preferences with auto-save
+- **Modified** `xavigate-site/fr/settings.html` — same language selector with French labels
+- **Impact:** Single source of truth for user language preference. All emails, Pulse notes, and UI respect `users.locale`. No more ad-hoc inference from assessments or URL paths.
+- **Docs:** `planning/handoffs/2026-03-25-03-xavigate-user-default-language.md`
+
+### Pulse — v3 Three-Axis Note Engine
+- 2026-03-25 — Pulse project created. Cloudflare Worker + D1 + Telegram delivery. New diagnostic product: personalized map-linked notes. Three-axis engine (category/touch/function), 20+ topic extractors, quality gate with anti-template + trait pathologizing prevention.
+
 ### Xavigate API — E2E Pipeline Fixes (3 bugs)
 - **Modified** `xavigate-api/src/map-workflow.js` — renderHTML step now returns R2 key instead of full HTML (was exceeding CF Workflow 1MiB step output limit, blocking all map deliveries)
 - **Modified** `xavigate-api/src/index.js` — added `POST /internal/maps/enqueue?id=N` admin endpoint to trigger readiness check + queue enqueue
