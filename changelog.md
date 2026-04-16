@@ -1,4 +1,5 @@
 ## 2026-04-16
+- Added GOV-22 (Plain Language Standard) to governance system. New gate for voice/clarity quality on all consumer-facing content. Content production triad → quartet. Auto-load trigger wired in CLAUDE.md. Applied to 8 xavigate-site product pages. Phrase-map replacements updated.
 - Doc engine built (`planning/doc-engine/`). 9 missing READMEs generated. 12 repos got .gitignore. Sensitive files untracked from planning/. 32-item accuracy roadmap.
 - Backup D1 export fixed — wrangler API token lacked D1 perms, added `env -u CLOUDFLARE_API_TOKEN` fallback to OAuth.
 
