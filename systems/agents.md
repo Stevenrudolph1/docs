@@ -13,8 +13,8 @@ Dual-machine agent infrastructure. Xavi (executive AI) and Beacon (course instru
 
 | Agent | Location | Model | Purpose |
 |-------|----------|-------|---------|
-| **Xavi** | M1 `agents/xavi/` | GPT-5.4 | Executive partner: 3 modes (CFO/Insight/Governance), ACP dispatch, debugging, decision logging |
-| **Beacon** | M1 `agents/beacon/` | GPT-5.4 | Course instructor: Telegram bot, auto-enrollment, invite codes, lesson delivery |
+| **Xavi** | M1 `agents/xavi/` | Claude (claude-sonnet-4-6 primary, claude-opus-4-6 configured) | Executive partner: 3 modes (CFO/Insight/Governance), ACP dispatch, debugging, decision logging |
+| **Beacon** | M1 `agents/beacon/` | Claude (claude-sonnet-4-6) | Course instructor: Telegram bot, auto-enrollment, invite codes, lesson delivery |
 | **Claude Code** | M4 | Claude Opus 4.6 | Implementation: receives ACP tasks, builds/fixes/deploys |
 
 ## Xavi Capabilities
@@ -45,7 +45,7 @@ Dual-machine agent infrastructure. Xavi (executive AI) and Beacon (course instru
 | Machine | Role | IP |
 |---------|------|-----|
 | M4 (MacBook) | SSOT — all repos, governance, todos, planning | 192.168.1.12 |
-| M1 (Mac Mini) | Runtime — agents, bots, cron, email | 192.168.1.43 |
+| M1 (Mac Mini) | Runtime — agents, bots, cron, email | 192.168.1.28 |
 
 - SSH both ways: `ssh m1` / `ssh m4`
 - M4→M1 sync: rsync governance every 6 hours (read-only on M1, chmod 444)

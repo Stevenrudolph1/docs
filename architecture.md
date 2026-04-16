@@ -1,6 +1,6 @@
 # System Architecture
 
-**Last updated:** 2026-03-17
+**Last updated:** 2026-04-16
 
 ---
 
@@ -25,7 +25,7 @@
 ┌───────────────────────────┴──────────────────────────┐
 │                  DIAGNOSTIC ENGINE                    │
 │  diagnostics/                                        │
-│  Foundation (free) → Entry Map ($29) → Xavigate Map ($97)│
+│  Xavigate Insight Assessment (free) → Xavigate Map ($97) │
 │  engine/ (MN engine, structural model)               │
 │  canon/ (locked theory specs)                        │
 └──────────────────────────────────────────────────────┘
@@ -45,11 +45,12 @@
 ┌──────────────────────────────────────────────────────┐
 │                 FRAMEWORK / IP LAYER                  │
 │                                                       │
-│  books/ (18 manuscripts)    knowledge/ (GOV-00–17)   │
+│  books/ (18 manuscripts)    knowledge/ (GOV-00–21)   │
 │  renOS/ (4 compliance       design-system/ (tokens,  │
 │   checkers)                  marks, covers)           │
-│  multiple-natures/ (MN      training/ (RPT spec,     │
-│   theory, MNTEST Q-bank)     course content)         │
+│  multiple-natures/ (MN      training/ (RPT: 1 course,│
+│   theory, MNTEST Q-bank)     7 modules, 2 tiers      │
+│                              $600/$1,500)             │
 └──────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────┐
@@ -60,6 +61,22 @@
 │  communication/ (Substack repo, MailerLite, partners)│
 │  marketing/ (social media, Late API, analytics)      │
 │  skills/ (Claude skill files)                        │
+│  pulse/ (daily pulse system)                         │
+│  security/ (security config, audit)                  │
+│  backups/ (backup scripts, snapshots)                │
+│  translation/ (French translations, i18n pipeline)   │
+│  openclaw/ (OpenClaw agent config, plugins)          │
+│  openclaw-logs/ (OpenClaw session logs)              │
+│  partners/ (partner comms, agreements)               │
+│  ai-spend-tracker/ (AI API spend monitoring)         │
+│  licensing/ (IP licensing, agreements)               │
+│  sr-governance-mcp/ (governance MCP server)          │
+│  xavigate-launch/ (launch roadmap, checklists)       │
+│  xavigate-training-worker/ (training CF Worker)      │
+│  voice-feed/ (voice content pipeline)                │
+│  xavi-shorts/ (short-form video content)             │
+│  xavi-platform/ (Renergence Chat, daily DM)          │
+│  references/ (reference materials)                   │
 └──────────────────────────────────────────────────────┘
 
 Infrastructure:

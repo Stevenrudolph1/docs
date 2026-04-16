@@ -52,16 +52,61 @@ xavigate-site/test.html (MNTEST 76Q)
   ↓ (scores submitted → Foundation layer free)
 xavigate-api/ (scoring endpoint)
   ↓ (results stored)
-xavigate-site/entry-map-intake.html (6-field short intake → Entry Map $29)
-  ↓
 diagnostics/engine/ (MN engine, structural model)
   ↓
 diagnostics/products/map/ (Xavigate Map $97 — all 3 layers)
 ```
 
-**Product staircase:** Foundation (free) → Entry Map ($29) → Xavigate Map ($97)
+**Product tiers:** Xavigate Insight Assessment (free) → Xavigate Map ($97)
 **If you change:** MNTEST questions → update `diagnostics/products/mntest/question-bank/`
 **If you change:** MN engine scoring → revalidate with `diagnostics/validation/`
+
+## Map Update Chain
+
+```
+xavigate-site/map-update-intake.html (3-step wizard)
+  ↓ (POST)
+xavigate-shop-worker/ → /intake/map-update endpoint
+  ↓ (D1 write)
+map_updates + map_summary_points tables (migration 017)
+  ↓ (read by)
+xavigate-shop-worker/ → /map/update-points endpoint
+  ↓
+diagnostics/products/map-update/ (generation + PDF)
+```
+
+**If you change:** map_updates or map_summary_points schema → update shop worker endpoints + intake form
+**If you change:** Map Update generation prompts → update `diagnostics/products/map-update/`
+
+## Training Chain
+
+```
+xavigate-training/ (static HTML portal — Cloudflare Pages)
+  ↓ (API calls)
+xavigate-training-worker/ (Cloudflare Worker — magic link auth, progress, enrollments)
+  ↓ (D1 read/write)
+Shared D1 database (same as API + shop worker)
+```
+
+**If you change:** D1 schema → update training worker alongside API and shop worker
+**If you change:** training content → manual deploy via wrangler (GitHub auto-deploy broken)
+
+## Security Chain
+
+```
+security/ (audit report, threat model, remediation plan)
+  ↓ (implemented in)
+xavigate-api/src/input-sanitizer.js → sanitizeObject()
+xavigate-api/src/output-validator.js → validateAndClean()
+xavigate-api/src/pi-scorer.js → scoreFlags(), scoreValidationEvents()
+xavigate-api/src/alert-dispatcher.js → dispatchAlert() → AWS SNS/SES
+xavigate-api/src/security-logger.js → D1 security_events table
+  ↓ (monitored via)
+GET /admin/security/events, GET /admin/security/summary
+```
+
+**If you change:** sanitizer rules → update pi-scorer thresholds + red-team tests (`security/scripts/redteam-e2e.sh`)
+**If you change:** alert destinations → update wrangler secrets (ALERT_PHONE_NUMBER) + SES config
 
 ## Governance Chain
 

@@ -2,7 +2,7 @@
 
 Every folder in `~/Projects/` and what it is.
 
-**Last updated:** 2026-03-17
+**Last updated:** 2026-04-16
 
 ---
 
@@ -25,11 +25,10 @@ Every folder in `~/Projects/` and what it is.
 | Folder | What | Scope | Has git remote |
 |--------|------|-------|---------------|
 | `books/` | 18 manuscripts across 4 themes + book generator pipeline. | IP | yes |
-| `knowledge/` | Canonical SSOT for all framework knowledge (GOV-00–17, publishing, framework). | governance | yes |
+| `knowledge/` | Canonical SSOT for all framework knowledge (GOV-00–21, publishing, framework). | governance | yes |
 | `renOS/` | Constraint Operating System. 4 compliance checkers. | governance engine | no (local) |
 | `design-system/` | Root visual design spec: palette, typography, marks, covers. | design | no (local) |
 | `multiple-natures/` | MN theory, MNTEST question bank, practitioner network. | reference | no (local) |
-| `training/` | RPT practitioner training spec, course content. | course content | no (local) |
 
 ## Operations (Steven's infrastructure)
 
@@ -40,8 +39,26 @@ Every folder in `~/Projects/` and what it is.
 | `renergence-intelligence/` | Governance engine — ren.py, signals, scores, profiles. | ops | no (local) |
 | `skills/` | Claude skill files (SKILL.md per domain). | ops | no (local) |
 | `personal/` | Photos, headshots, family docs. | personal | no |
-| `career-database/` | MN/MI-tagged job scoring database. | data | no (local) |
+| `training/` | RPT practitioner training: 1 course, 7 modules, 2 tiers ($600/$1,500). | course ops | no (local) |
 | `docs/` | Internal system documentation hub. | meta | no (local) |
+| `pulse/` | Daily pulse system. | ops | no (local) |
+| `security/` | Security configuration and audit. | ops | no (local) |
+| `backups/` | Backup scripts and snapshots. | ops | no (local) |
+| `translation/` | French translations, i18n pipeline. | ops | no (local) |
+| `openclaw/` | OpenClaw agent configuration, plugins. | ops | no (local) |
+| `openclaw-logs/` | OpenClaw session logs. | ops | no (local) |
+| `partners/` | Partner communications and agreements. | ops | no (local) |
+| `ai-spend-tracker/` | AI API spend monitoring. | ops | no (local) |
+| `licensing/` | IP licensing and agreements. | ops | no (local) |
+| `sr-governance-mcp/` | Governance MCP server. | ops | no (local) |
+| `xavigate-launch/` | Launch roadmap and checklists. | ops | no (local) |
+| `xavigate-training-worker/` | Training portal Cloudflare Worker backend. | backend | no (local) |
+| `voice-feed/` | Voice content pipeline. | content producer | no (local) |
+| `xavi-shorts/` | Short-form video content. | content producer | no (local) |
+| `xavi-platform/` | Renergence Chat bot, daily DM, Xavi products. | platform | no (local) |
+| `references/` | Reference materials. | reference | no (local) |
+| `jonathan/` | Jonathan project files. | personal | no |
+| `michael-rudolph/` | Michael Rudolph project files. | personal | no |
 
 ## Archive
 

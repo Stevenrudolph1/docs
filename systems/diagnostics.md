@@ -17,7 +17,9 @@ Unified engine for MN×MI assessment and diagnostic products. One instrument (MN
 | **Xavigate Insight Assessment** | Free | Alignment | MNTEST (76 items) | 9 MN + 10 MI scores + 8-screen guided recognition report |
 | **Xavigate Map** | $97 | + Structure + Positioning | Deeper intake (45–60 min) | Complete diagnostic — person × arrangement × interpretation |
 
-**Deprecated (removed 2026-03-18):** Entry Map ($29), Foundation Scan (renamed), Full Map (renamed), MNTEST Report (absorbed), Career Explorer (absorbed).
+| **Xavigate Map Update** | Included | Structure + Positioning | Followup intake (changed fields only) | Updated map reflecting life changes |
+
+**Deprecated (removed 2026-03-18):** Entry Map ($29), Foundation Scan (renamed), Full Map (renamed), MNTEST Report (absorbed), Career Explorer (absorbed — code still present at `products/career-explorer/`).
 
 **Canonical rules:**
 - Always Alignment → Structure → Positioning. Never reordered.
@@ -32,7 +34,7 @@ Diagnostics is one of three product categories:
 |----------|----------|
 | **Diagnostics** | Xavigate Insight Assessment (free), Xavigate Map ($97) |
 | **Books** | Free gateway books + paid titles via Gumroad/Stripe. See `books/` |
-| **Courses** | Renergence Practitioner Training (5 courses, $499 each). See `docs/systems/training.md` |
+| **Courses** | Renergence Practitioner Training (5 courses, 2 tiers: $600 Standard / $1,500 With Live Instructor). See `docs/systems/training.md` |
 
 ## Core Engine
 

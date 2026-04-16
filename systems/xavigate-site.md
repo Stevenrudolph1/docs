@@ -3,13 +3,13 @@
 **Location:** `~/Projects/xavigate-site/`
 **URL:** xavigate.com (renergence.com 301s here)
 **Hosting:** Cloudflare Pages — git push to `main` = auto-deploy
-**Last updated:** 2026-03-20
+**Last updated:** 2026-04-16
 
 ---
 
 ## What It Is
 
-The active Xavigate website. Plain HTML5 + CSS + JS, no build system, no framework. ~68 public pages. Product staircase: Xavigate Insight Assessment (free) → Xavigate Map ($97). Book library. Practitioner tools. Paid-traffic landing pages are now being organized under `/landing/`.
+The active Xavigate website. Plain HTML5 + CSS + JS, no build system, no framework. ~275 public pages (326 total HTML files including utility/template files). Product staircase: Xavigate Insight Assessment (free) → Xavigate Map ($97). Book library. Practitioner tools. Paid-traffic landing pages are now being organized under `/landing/`.
 
 ## Page Structure
 

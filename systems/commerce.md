@@ -59,6 +59,14 @@ xavigate-training (CF Pages portal) + training worker (auth, progress)
 | `purchases` | Payment history (stripe session/intent IDs) |
 | `sessions` / `magic_links` | Auth state |
 | `maps` | Diagnostic product tracking (status lifecycle) |
+| `map_generation_jobs` | Map pipeline job tracking (status, attempts, R2 refs) |
+| `map_generation_steps` | Per-step tracking within a generation job (pass1–pass4, PDF, email) |
+| `map_events` | Full map lifecycle event log (workflow_started, pass_completed, pdf_rendered, email_sent, errors) |
+| `mn_assessments` | MN/MI score storage (assessment_uid, scores, result_snapshot) |
+| `intake_profiles` | User demographic/context data for map intake |
+| `intake_situations` | Per-situation intake data (supports followup/update flows) |
+| `security_events` | Security audit trail (sanitizer flags, validation events, scored severity) |
+| `alert_rate_limit` | Rate limiting for SMS/email security alerts (hourly buckets) |
 | `analytics_events` | Behavior tracking (pages, UTM, geo) |
 
 ## Email (AWS SES v2)
@@ -67,9 +75,34 @@ xavigate-training (CF Pages portal) + training worker (auth, progress)
 - Region: us-east-1, AWS Sig V4
 - Types: magic links, book delivery, map status
 
+## Map Update Flow
+
+The xavigate-api supports map updates (followup maps) via:
+- `map-update-intake.html` — dedicated intake page for returning users
+- `map-followup` product ID triggers followup flow at checkout
+- `intake_situations` table tracks `is_followup`, `previous_situation_id`, `changed_fields`
+- Followup maps reuse existing profile data, only collecting what changed
+
+## Map Event Logging
+
+`map-event-logger.js` provides non-blocking lifecycle event logging to the `map_events` table via `logMapEvent(db, mapId, eventType, detail)`. Events tracked: `workflow_started`, `pass_completed` (per pass), `pdf_rendered`, `status_changed`, `email_sent`, `error`. Used throughout `map-workflow.js` for full timeline visibility.
+
+## Security Headers
+
+`applySecurityHeaders(response)` wraps every response with:
+- `Strict-Transport-Security: max-age=31536000; includeSubDomains`
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+
+## GDPR Data Deletion
+
+`DELETE /admin/user/:id/data` — cascading deletion (right to erasure). Deletes across: `map_generation_steps`, `map_generation_jobs`, `maps`, `intake_situations`, `intake_profiles`, `mn_assessments`, `sessions`, `magic_links`, `enrollments`, `lesson_progress`, `pulse_users`/`pulse_events`/`pulse_commands`, and the `users` record itself. Purchases are anonymized (email redacted, user_id nulled). Security events are anonymized (user_id nulled, IP redacted) to preserve audit trail. Logs a `gdpr_data_deletion` security event.
+
 ## Admin APIs
 
-Bearer token auth. Endpoints at shop worker: `/admin/enrollments`, `/admin/purchases`, `/admin/products`, `/admin/grant-book`, `/admin/analytics/*`, `/admin/stripe/*`.
+Bearer token auth. Endpoints at shop worker: `/admin/enrollments`, `/admin/purchases`, `/admin/products`, `/admin/grant-book`, `/admin/analytics/*`, `/admin/stripe/*`, `/admin/user/:id/data` (GDPR deletion).
 
 ## Deployment
 

@@ -8,19 +8,29 @@
 
 ## What It Is
 
-Renergence Practitioner Training (RPT) — 5 courses teaching diagnostic practice through exercises, drills, walkthroughs, and case work. Delivered via web portal and Telegram bot (Beacon).
+Renergence Practitioner Training (RPT) — 1 course with 7 sequential modules teaching diagnostic practice through exercises, drills, walkthroughs, and case work. Delivered via web portal and Telegram bot (Beacon).
 
 ## Course Structure
 
-| Course | Modules | Exercises | Cases | Price |
-|--------|---------|-----------|-------|-------|
-| Basics | 3 | 11 | 2 | $499 |
-| Structure Focus | 2 | 13 | 2 | $499 |
-| Alignment Focus | 2 | 13 | 2 | $499 |
-| Positioning Focus | 2 | 13 | 2 | $499 |
-| Advanced | 2 | 13 | 3 | $499 |
+One course. Seven sequential modules (M1 through M7). No branching — work through in order. Module 1 is free and open. Modules 2-7 are paid.
 
-Books are supplementary reading. All required reading comes from free gateway books.
+### Tiers
+
+| Tier | What | Price |
+|------|------|-------|
+| **Materials Only** | Full course materials, exercises, case walkthroughs. No submission, no review, no completion. | $300 |
+| **Standard** | Full course materials + learning portfolio + expert review + two revisions + completion credential. | $600 |
+| **With Live Instructor** | Same as Standard + up to 2 hours individual time with Steven Rudolph. | $1,500 |
+
+### Portal Programs
+
+The training portal (`training.xavigate.com`) organizes content into 3 programs:
+
+| Program | Portal file |
+|---------|------------|
+| Foundations | `programs/foundations.html` |
+| MN Training | `programs/mn-training.html` |
+| Map Training | `programs/map-training.html` |
 
 ## Delivery Channels
 
